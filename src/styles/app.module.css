@@ -1,0 +1,11 @@
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: blueviolet;
+}
+
+.header {
+  color: #2c3e50;
+  border-bottom: 1px solid #eee;
+}
