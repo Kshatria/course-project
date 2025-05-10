@@ -1,35 +1,24 @@
 const { resolve } = require('path');
-const { DefinePlugin } = require('@rspack/core');
+const { DefinePlugin, rspack } = require('@rspack/core');
 
 module.exports = {
-  // Точка входа приложения
   entry: './src/main.tsx',
-
-  // Режим разработки или продакшн
   mode: process.env.NODE_ENV || 'development',
-
-  // Настройка выходных файлов
   output: {
+    clean: true,
     path: resolve(__dirname, 'dist'),
-    filename: 'main.js',
-    publicPath: '/',
+    filename: '[name].[contenthash].js',
+    publicPath:
+      process.env.DEPLOY_ENV === 'gh-pages' ? 'https://github.com/Kshatria/course-project' : '/',
   },
-
-  // Разрешение расширений файлов
   resolve: {
     extensions: ['.js', '.jsx', '.ts', '.tsx'],
     alias: {
-      '@': resolve(__dirname, 'src'), // Алиас для импортов
+      '@': resolve(__dirname, 'src'),
     },
   },
-
-  // experiments: {
-  //   css: true,
-  // },
-
   module: {
     rules: [
-      // Обработка JavaScript (JS/JSX) и TypeScript (TS/TSX)
       {
         test: /\.(js|jsx|ts|tsx)$/,
         exclude: /node_modules/,
@@ -42,13 +31,12 @@ module.exports = {
             },
             transform: {
               react: {
-                runtime: 'automatic', // Для нового JSX transform
+                runtime: 'automatic',
               },
             },
           },
         },
       },
-
       {
         test: /\.module\.css$/,
         use: [
@@ -58,17 +46,15 @@ module.exports = {
             options: {
               modules: {
                 auto: true,
-                exportLocalsConvention: 'asIs', // Сохраняет оригинальные имена классов
-                namedExport: false, // Отключает именованные экспорты
+                exportLocalsConvention: 'asIs',
+                namedExport: false,
               },
-              importLoaders: 1, // Важно для работы postcss-loader
+              importLoaders: 1,
             },
           },
-          'postcss-loader', // Добавлен postcss-loader
+          'postcss-loader',
         ],
       },
-
-      //Обычный CSS (без модулей) + PostCSS
       {
         test: /\.css$/,
         exclude: /\.module\.css$/,
@@ -76,16 +62,14 @@ module.exports = {
       },
     ],
   },
-
-  // Плагины
   plugins: [
-    // Глобальные переменные (например, для process.env)
+    new rspack.HtmlRspackPlugin({
+      template: './public/index.html',
+    }),
     new DefinePlugin({
       'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
     }),
   ],
-
-  // Настройки dev-сервера
   devServer: {
     static: {
       directory: resolve(__dirname, 'public'),
@@ -93,9 +77,21 @@ module.exports = {
     hot: true,
     port: 3000,
     open: true,
-    historyApiFallback: true, // Для SPA (React Router)
+    historyApiFallback: true,
   },
-
-  // Source maps (для отладки)
   devtool: 'source-map',
+  optimization: {
+    minimize: true,
+    splitChunks: {
+      chunks: 'all',
+      minSize: 20000,
+      cacheGroups: {
+        vendors: {
+          test: /[\\/]node_modules[\\/]/,
+          name: 'vendors',
+          chunks: 'all',
+        },
+      },
+    },
+  },
 };

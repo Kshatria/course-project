@@ -1,20 +1,40 @@
-import { Suspense } from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import Home from '@/pages/Home';
-import About from '@/pages/About';
-import styles from '@/styles/app.module.css';
+import { Suspense, type ReactNode } from 'react';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { Login, Registration, Dashboard } from '@/pages';
+import { LayoutSelector } from './layouts';
 
-export default function App() {
-  return (
-    <div className={styles.container}>
-      <h1 className={styles.header}>My App</h1>
-      <BrowserRouter>
-        <Suspense fallback={<div>Loading...</div>} />
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/about" element={<About />} />
-        </Routes>
-      </BrowserRouter>
-    </div>
-  );
+interface PrivateRouteProps {
+  children: ReactNode;
 }
+
+const PrivateRoute = ({ children }: PrivateRouteProps) => {
+  const useAuth = () => {
+    return false;
+  };
+  const isAuth = useAuth();
+  return isAuth ? children : <Navigate to="/login" replace />;
+};
+
+const App = () => {
+  return (
+    <BrowserRouter>
+      <Suspense fallback={<div>Loading...</div>} />
+      <Routes>
+        <Route element={<LayoutSelector />}>
+          <Route path="/login" element={<Login />} />
+          <Route path="/registration" element={<Registration />} />
+          <Route
+            path="/"
+            element={
+              <PrivateRoute>
+                <Dashboard />
+              </PrivateRoute>
+            }
+          />
+        </Route>
+      </Routes>
+    </BrowserRouter>
+  );
+};
+
+export default App;
