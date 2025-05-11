@@ -10,14 +10,14 @@
     "lint": "eslint src --ext .ts,.tsx",
     "lint:fix": "eslint src --ext .ts,.tsx --fix",
     "format": "prettier --write src/**/*.{ts,tsx,css}",
-    "deploy": "set DEPLOY_ENV=gh-pages && npm run build && gh-pages -d dist",
+    "deploy": "rspack build --mode production && gh-pages -d dist",
     "clean": "rm -rf dist .rspack_cache",
     "test": "jest",
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage",
     "test:update": "jest --updateSnapshot"
   },
-  "homepage": "https://kshatria.github.io/course-project/",
+  "homepage": "https://kshatria.github.io/course-project",
   "repository": {
     "type": "git",
     "url": "https://github.com/Kshatria/course-project.git"
