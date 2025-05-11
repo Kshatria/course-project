@@ -10,7 +10,7 @@
     "lint": "eslint src --ext .ts,.tsx",
     "lint:fix": "eslint src --ext .ts,.tsx --fix",
     "format": "prettier --write src/**/*.{ts,tsx,css}",
-    "deploy": "set DEPLOY_ENV=gh-pages && npm run build && gh-pages -d dist -b gh-pages -r https://github.com/kshatria/course-project.git",
+    "deploy": "set DEPLOY_ENV=gh-pages && npm run build && gh-pages -d dist",
     "clean": "rm -rf dist .rspack_cache",
     "test": "jest",
     "test:watch": "jest --watch",

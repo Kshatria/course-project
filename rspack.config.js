@@ -8,8 +8,7 @@ module.exports = {
     clean: true,
     path: resolve(__dirname, 'dist'),
     filename: '[name].[contenthash].js',
-    publicPath:
-      process.env.DEPLOY_ENV === 'gh-pages' ? 'https://kshatria.github.io/course-project/' : '/',
+    publicPath: process.env.DEPLOY_ENV === 'gh-pages' ? '/course-project/' : '/',
   },
   resolve: {
     extensions: ['.js', '.jsx', '.ts', '.tsx'],
