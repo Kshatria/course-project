@@ -18,6 +18,10 @@
     "test:update": "jest --updateSnapshot"
   },
   "homepage": "https://kshatria.github.io/course-project/",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Kshatria/course-project.git"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
