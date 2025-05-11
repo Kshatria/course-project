@@ -1,6 +1,8 @@
 import { StrictMode } from 'react';
+import { ApolloProvider } from '@apollo/client';
 import { createRoot } from 'react-dom/client';
-import App from './App';
+import { client } from '@/apollo/client';
+import { App } from './App';
 import './styles/global.css';
 
 const container = document.querySelector('#root');
@@ -9,6 +11,8 @@ const root = createRoot(container);
 
 root.render(
   <StrictMode>
-    <App />
+    <ApolloProvider client={client}>
+      <App />
+    </ApolloProvider>
   </StrictMode>,
 );

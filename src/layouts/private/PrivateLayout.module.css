@@ -4,8 +4,13 @@
   padding: 20px;
 }
 
+.wrapper {
+  border-bottom: 1px solid #eee;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
 .header {
   color: #2c3e50;
-  border-bottom: 1px solid #eee;
-  text-align: center;
 }

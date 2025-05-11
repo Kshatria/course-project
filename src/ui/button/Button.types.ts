@@ -3,10 +3,10 @@ export type ButtonProps = {
   color?: 'Primary' | 'Secondary';
   /* Недоступное состояние кнопки  */
   disabled?: boolean;
+  /* Событие нажатия */
+  onClick?: () => void;
   /* Текст кнопки */
   text: string;
   /* Текст кнопки */
-  type?: 'submit' | 'button';
-  /* Событие нажатия */
-  onClick?: () => void;
+  type?: 'button' | 'submit';
 };

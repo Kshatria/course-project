@@ -1,0 +1,17 @@
+.button {
+  display: flex;
+  align-items: center;
+  padding: 8px 16px;
+  width: fit-content;
+  cursor: pointer;
+  border-radius: 6px;
+}
+
+.button svg {
+  display: block;
+  margin-right: 8px;
+}
+
+.button:hover {
+  background-color: #f9fafb;
+}

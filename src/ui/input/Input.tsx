@@ -1,11 +1,11 @@
-import { useState, forwardRef } from 'react';
-import type { InputType, InputProps } from './Input.types';
-import styles from './Input.module.css';
+import { forwardRef, useState } from 'react';
 import { FiEye, FiEyeOff } from 'react-icons/fi';
+import type { InputProps, InputType } from './Input.types';
+import styles from './Input.module.css';
 
 const Input = forwardRef<HTMLInputElement, InputProps>(
   (
-    { type = 'text', label, value, onChange, placeholder, error, className = '', ...props },
+    { className = '', error, id, label, onChange, placeholder, type = 'text', value, ...props },
     ref,
   ) => {
     const [showPassword, setShowPassword] = useState(false);
@@ -15,25 +15,30 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
 
     return (
       <div className={`${styles.container} ${className}`}>
-        {label && <label className={styles.label}>{label}</label>}
+        {label && (
+          <label className={styles.label} htmlFor={id}>
+            {label}
+          </label>
+        )}
 
         <div className={styles.inputWrapper}>
           <input
+            className={`${styles.input} ${error ? styles.error : ''}`}
+            id={id}
+            placeholder={placeholder}
             ref={ref}
             type={inputType}
             value={value}
             onChange={onChange}
-            placeholder={placeholder}
-            className={`${styles.input} ${error ? styles.error : ''}`}
             {...props}
           />
 
           {isPassword && (
             <button
+              aria-label={showPassword ? 'Hide password' : 'Show password'}
+              className={styles.toggleButton}
               type="button"
               onClick={() => setShowPassword(!showPassword)}
-              className={styles.toggleButton}
-              aria-label={showPassword ? 'Hide password' : 'Show password'}
             >
               {showPassword ? <FiEyeOff size={18} /> : <FiEye size={18} />}
             </button>
@@ -46,4 +51,6 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
   },
 );
 
-export { Input, type InputType, type InputProps };
+Input.displayName = 'Input';
+
+export { Input, type InputProps, type InputType };

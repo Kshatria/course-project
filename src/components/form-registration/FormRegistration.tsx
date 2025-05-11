@@ -1,39 +1,55 @@
+import { type SubmitHandler, useForm } from 'react-hook-form';
 import { Link } from 'react-router-dom';
-import { useForm, SubmitHandler } from 'react-hook-form';
-import { Input, Button } from '@/ui';
+import { useMutation } from '@apollo/client';
+import { SIGN_UP_MUTATION } from '@/graphql/auth';
+import { useAuth } from '@/stores/useAuth';
+import { Button, Input } from '@/ui';
 import type { FormRegistrationData } from './FormRegistration.types';
 import styles from './FormRegistration.module.css';
 
 const FormRegistration = () => {
   const {
-    register,
+    formState: { errors, isValid },
     handleSubmit,
+    register,
     watch,
-    reset,
-    formState: { errors },
-  } = useForm<FormRegistrationData>();
+  } = useForm<FormRegistrationData>({ mode: 'onChange' });
+  const { login } = useAuth();
+
+  const [signup, { error: gqlError, loading }] = useMutation(SIGN_UP_MUTATION, {
+    onCompleted: (data) => {
+      login(data.profile.signup.token);
+    },
+    onError: (err) => {
+      throw new Error(`Ошибка регистрации: ${err.message}`);
+    },
+  });
 
   const password = watch('password');
 
   const onSubmit: SubmitHandler<FormRegistrationData> = async (data) => {
     try {
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      console.log('Форма отправлена:', data);
-      reset();
-      alert('Вход выполнен успешно!');
-    } catch (error) {
-      console.error('Ошибка входа:', error);
+      await signup({
+        variables: {
+          email: data.email,
+          password: data.password,
+          commandId: '7808',
+        },
+      });
+    } catch (err) {
+      throw new Error(`Ошибка регистрации: ${err}`);
     }
   };
 
   return (
     <div className={styles.registrationContainer}>
       <h2 className={styles.title}>Регистрация</h2>
-      <form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
+      <form className={styles.form} data-testid="register-form" onSubmit={handleSubmit(onSubmit)}>
         <Input
-          type="email"
-          label="Email"
           error={errors.email?.message}
+          id="email"
+          label="Email"
+          type="email"
           {...register('email', {
             required: 'Email обязателен',
             pattern: {
@@ -44,9 +60,10 @@ const FormRegistration = () => {
         />
 
         <Input
-          type="password"
-          label="Пароль"
           error={errors.password?.message}
+          id="password"
+          label="Пароль"
+          type="password"
           {...register('password', {
             required: 'Пароль обязателен',
             minLength: {
@@ -58,9 +75,10 @@ const FormRegistration = () => {
         />
 
         <Input
-          type="password"
-          label="Повторите пароль"
           error={errors.confirmPassword?.message}
+          id="repeatPassword"
+          label="Повторите пароль"
+          type="password"
           {...register('confirmPassword', {
             required: 'Повторите пароль',
             validate: (value) => value === password || 'Пароли не совпадают',
@@ -71,10 +89,12 @@ const FormRegistration = () => {
 
         <Button
           color={'Primary'}
-          disabled={Object.keys(errors).length > 0}
-          text={'Зарегистрироваться'}
+          disabled={!isValid || loading}
+          text={loading ? 'Загрузка...' : 'Зарегистрироваться'}
           type={'submit'}
         />
+
+        {gqlError && <p className={styles.error}>{gqlError.message}</p>}
       </form>
     </div>
   );

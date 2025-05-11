@@ -1,43 +1,51 @@
-import type { FC } from 'react';
+import { type SubmitHandler, useForm } from 'react-hook-form';
 import { Link } from 'react-router-dom';
-import { useForm, SubmitHandler } from 'react-hook-form';
-import { Input, Button } from '@/ui';
-import { FormLoginData } from './FormLogin.types';
+import { useMutation } from '@apollo/client';
+import { LOGIN_MUTATION } from '@/graphql/auth';
+import { useAuth } from '@/stores/useAuth';
+import { Button, Input } from '@/ui';
+import { type FormLoginData } from './FormLogin.types';
 import styles from './FormLogin.module.css';
 
-const FormLogin: FC = () => {
+const FormLogin = () => {
   const {
-    register,
+    formState: { errors, isValid },
     handleSubmit,
-    formState: { errors, isSubmitting },
-    reset,
-  } = useForm<FormLoginData>({
-    defaultValues: {
-      email: '',
-      password: '',
+    register,
+  } = useForm<FormLoginData>({ mode: 'onChange' });
+  const { login } = useAuth();
+
+  const [_login, { error: gqlError, loading }] = useMutation(LOGIN_MUTATION, {
+    onCompleted: (data) => {
+      login(data.profile.signin.token);
+    },
+    onError: (err) => {
+      throw new Error(`Ошибка входа: ${err}`);
     },
   });
 
   const onSubmit: SubmitHandler<FormLoginData> = async (data) => {
     try {
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      console.log('Форма отправлена:', data);
-      reset();
-      alert('Вход выполнен успешно!');
-    } catch (error) {
-      console.error('Ошибка входа:', error);
+      await _login({
+        variables: {
+          email: data.email,
+          password: data.password,
+        },
+      });
+    } catch (err) {
+      throw new Error(`Ошибка входа: ${err}`);
     }
   };
 
   return (
     <div className={styles.loginContainer}>
-      <h2 className={styles.title}>Вход в систему</h2>
-
-      <form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
+      <h2 className={styles.title}>Вход</h2>
+      <form className={styles.form} data-testid="login-form" onSubmit={handleSubmit(onSubmit)}>
         <Input
-          type="email"
-          label="Email"
           error={errors.email?.message}
+          id="email"
+          label="Email"
+          type="email"
           {...register('email', {
             required: 'Email обязателен',
             pattern: {
@@ -46,26 +54,33 @@ const FormLogin: FC = () => {
             },
           })}
         />
+
         <Input
-          type="password"
-          label="Пароль"
           error={errors.password?.message}
+          id="password"
+          label="Пароль"
+          type="password"
           {...register('password', {
             required: 'Пароль обязателен',
-            minLength: {
-              value: 8,
-              message: 'Пароль должен быть не менее 8 символов',
-            },
           })}
         />
+
         <Link to="/registration">Зарегистрироваться</Link>
 
         <Button
-          color={'Primary'}
-          disabled={isSubmitting}
-          text={isSubmitting ? 'Вход...' : 'Войти'}
-          type={'submit'}
+          color="Primary"
+          disabled={!isValid || loading}
+          text={loading ? 'Вход...' : 'Войти'}
+          type="submit"
         />
+
+        {gqlError && (
+          <p className={styles.error}>
+            {gqlError.message.includes('Invalid credentials')
+              ? 'Неверный email или пароль'
+              : gqlError.message}
+          </p>
+        )}
       </form>
     </div>
   );
