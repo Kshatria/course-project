@@ -1,0 +1,40 @@
+.button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  margin: 0 auto;
+  background-color: black;
+  color: white;
+}
+
+.button:hover {
+  background-color: lightgray;
+  color: black;
+}
+
+.disabled {
+  pointer-events: none;
+  opacity: 0.3;
+}
+
+.primary {
+  background-color: black;
+  color: white;
+}
+
+.primary:hover {
+  background-color: lightgray;
+  color: black;
+}
+
+.secondary {
+  background-color: orange;
+  color: white;
+}
+
+.secondary:hover {
+  background-color: orangered;
+  color: white;
+}

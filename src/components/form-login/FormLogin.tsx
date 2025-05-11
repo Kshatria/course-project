@@ -1,7 +1,7 @@
 import type { FC } from 'react';
 import { Link } from 'react-router-dom';
 import { useForm, SubmitHandler } from 'react-hook-form';
-import { Input } from '@/ui';
+import { Input, Button } from '@/ui';
 import { FormLoginData } from './FormLogin.types';
 import styles from './FormLogin.module.css';
 
@@ -46,7 +46,6 @@ const FormLogin: FC = () => {
             },
           })}
         />
-
         <Input
           type="password"
           label="Пароль"
@@ -59,12 +58,14 @@ const FormLogin: FC = () => {
             },
           })}
         />
-
         <Link to="/registration">Зарегистрироваться</Link>
 
-        <button type="submit" className={styles.submitButton} disabled={isSubmitting}>
-          {isSubmitting ? 'Вход...' : 'Войти'}
-        </button>
+        <Button
+          color={'Primary'}
+          disabled={isSubmitting}
+          text={isSubmitting ? 'Вход...' : 'Войти'}
+          type={'submit'}
+        />
       </form>
     </div>
   );

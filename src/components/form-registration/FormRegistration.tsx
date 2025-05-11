@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { useForm, SubmitHandler } from 'react-hook-form';
-import { Input } from '@/ui';
+import { Input, Button } from '@/ui';
 import type { FormRegistrationData } from './FormRegistration.types';
 import styles from './FormRegistration.module.css';
 
@@ -69,13 +69,12 @@ const FormRegistration = () => {
 
         <Link to="/login">Авторизоваться</Link>
 
-        <button
-          type="submit"
-          className={styles.submitButton}
+        <Button
+          color={'Primary'}
           disabled={Object.keys(errors).length > 0}
-        >
-          Зарегистрироваться
-        </button>
+          text={'Зарегистрироваться'}
+          type={'submit'}
+        />
       </form>
     </div>
   );

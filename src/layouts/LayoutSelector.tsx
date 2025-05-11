@@ -1,13 +1,11 @@
 import { Outlet } from 'react-router-dom';
 import { MainLayout, PrivateLayout } from './';
 
-const LayoutSelector = () => {
-  const isAuthenticated = true;
+type LayoutSelectorProps = {
+  isAuthenticated: boolean | null;
+};
 
-  if (isAuthenticated === null) {
-    return <div>Loading...</div>;
-  }
-
+const LayoutSelector = ({ isAuthenticated }) => {
   const Layout = isAuthenticated ? PrivateLayout : MainLayout;
 
   return (
