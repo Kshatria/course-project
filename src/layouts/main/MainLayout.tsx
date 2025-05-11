@@ -1,9 +1,9 @@
 import type { ReactNode } from 'react';
 import styles from './MainLayout.module.css';
 
-interface MainRouteProps {
+type MainRouteProps = {
   children: ReactNode;
-}
+};
 
 const MainLayout = ({ children }: MainRouteProps) => {
   return (

@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { Input, type InputProps } from './Input';
 
@@ -56,7 +56,8 @@ describe('Input Component', () => {
     const input = screen.getByRole('textbox');
 
     await userEvent.type(input, 'test');
-    expect(handleChange).toHaveBeenCalledTimes(4);
+    const CALLED_TIMES = 4;
+    expect(handleChange).toHaveBeenCalledTimes(CALLED_TIMES);
   });
 
   it('forwards ref correctly', () => {

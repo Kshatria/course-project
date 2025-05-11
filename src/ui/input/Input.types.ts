@@ -1,12 +1,12 @@
-import { InputHTMLAttributes } from 'react';
+import { type InputHTMLAttributes } from 'react';
 
-type InputType = 'text' | 'password' | 'email';
+type InputType = 'email' | 'password' | 'text';
 
 type InputProps = InputHTMLAttributes<HTMLInputElement> & {
-  type?: InputType;
-  label?: string;
-  error?: string | null;
   className?: string;
+  error?: null | string;
+  label?: string;
+  type?: InputType;
 };
 
-export type { InputType, InputProps };
+export type { InputProps, InputType };
