@@ -1,7 +1,7 @@
 import { type SubmitHandler, useForm } from 'react-hook-form';
 import { Link } from 'react-router-dom';
 import { useMutation } from '@apollo/client';
-import { LOGIN_MUTATION } from '@/graphql/auth';
+import { LOGIN } from '@/graphql';
 import { useAuth } from '@/stores/useAuth';
 import { Button, Input } from '@/ui';
 import { type FormLoginData } from './FormLogin.types';
@@ -15,7 +15,7 @@ const FormLogin = () => {
   } = useForm<FormLoginData>({ mode: 'onChange' });
   const { login } = useAuth();
 
-  const [_login, { error: gqlError, loading }] = useMutation(LOGIN_MUTATION, {
+  const [_login, { error: gqlError, loading }] = useMutation(LOGIN, {
     onCompleted: (data) => {
       login(data.profile.signin.token);
     },
