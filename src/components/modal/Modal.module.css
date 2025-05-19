@@ -1,0 +1,53 @@
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1000;
+    --c-bg-primary: #2563eb;
+    --c-text-primary: #252628;
+}
+.overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+}
+.content {
+    position: relative;
+    max-width: 400px;
+    margin: 100px auto;
+    background: var(--c-bg-primary);
+    padding: 20px;
+    border-radius: 10px;
+    z-index: 1100;
+    text-align: center;
+    color: var(--c-text-primary);
+}
+.wrapper {
+    min-height: 100px;
+}
+.title {
+    text-align: center;
+    margin: 0 0 40px;
+    font-size: 24px;
+}
+.text {
+    margin-bottom: 20px;
+}
+.close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: transparent;
+    color: orange;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+}
+.close:hover {
+    color: orangered;
+}

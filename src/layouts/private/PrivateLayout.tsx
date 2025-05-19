@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react';
+import { Link } from 'react-router-dom';
 import { BackButton, UserDropdown } from '@/components';
 import styles from './PrivateLayout.module.css';
 
@@ -12,6 +13,8 @@ const PrivateLayout = ({ children }: PrivateRouteProps) => {
       <div className={styles.wrapper}>
         <BackButton />
         <h1 className={styles.header}>Я авторизован! УЕЕЕ!</h1>
+        <Link to={'/dashboard'}>Dashboard</Link>
+        <Link to={'/categories'}>Categories</Link>
         <UserDropdown />
       </div>
       {children}
