@@ -1,15 +1,15 @@
 import { type FC } from 'react';
-import { Link } from 'react-router-dom';
 import { useQuery } from '@apollo/client';
-import { CategoryAddForm , Modal } from '@/components';
+import { CategoryAddForm, Modal, ScrollList } from '@/components';
 import { CATEGORIES } from '@/graphql/queries/categories';
 import { useModal } from '@/hooks';
+import { Button } from '@/ui';
 
 const Categories: FC = () => {
-  const modal = useModal()
+  const modal = useModal();
   const { data, error, loading } = useQuery(CATEGORIES, {
     variables: {
-      input: {}
+      input: {},
     },
     fetchPolicy: 'network-only',
   });
@@ -18,24 +18,19 @@ const Categories: FC = () => {
   if (error) return <p>Ошибка: {error.message}</p>;
   const categories = data?.categories?.getMany?.data || [];
 
+  console.log(categories);
+
   return (
     <div>
-      <button onClick={modal.show}>Add Category</button>
-      {categories.length > 0 ? (
-        categories.map((item: any) => (
-          <Link key={item.id} to={`/categories/${item.id}`}>
-            <h3>{item.name}</h3>
-          </Link>
-        ))
-      ) : (
-        <p>Нет данных</p>
-      )}
+      <div style={{ display: 'flex', justifyContent: 'center', margin: '24px' }}>
+        <Button onClick={modal.show} text="Добавить операцию" />
+      </div>
+      <ScrollList defaultItems={categories} onScroll={() => {}} type="categories" />
       <Modal visible={modal.visible} onClose={modal.hide}>
         <CategoryAddForm closeFN={modal.hide} />
       </Modal>
     </div>
+  );
+};
 
-  )
-}
-
-export { Categories }
+export { Categories };

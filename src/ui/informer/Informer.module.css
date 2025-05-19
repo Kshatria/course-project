@@ -1,0 +1,38 @@
+.informer {
+  padding: 24px;
+  background-color: white;
+  border-radius: 4px;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+  box-sizing: border-box;
+  height: 100%;
+}
+
+.wrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.category {
+  font-size: 14px;
+  line-height: 18px;
+  color: grey;
+}
+
+.amount {
+  font-size: 24px;
+  line-height: 30px;
+  color: orange;
+}
+
+.name {
+  font-size: 32px;
+  line-height: 40px;
+  margin-bottom: 16px;
+}
+
+.desc > div {
+  margin: 0 0 16px;
+  font-size: 16px;
+  line-height: 20px;
+}

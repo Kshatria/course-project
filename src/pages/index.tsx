@@ -1,4 +1,4 @@
-export { Card } from './Card';
+export { Operation } from './Operation';
 export { Categories } from './Categories';
 export { Dashboard } from './Dashboard';
 export { Login } from './Login';

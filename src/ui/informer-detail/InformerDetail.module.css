@@ -1,0 +1,41 @@
+.informer-detail {
+  display: block;
+  padding: 24px;
+  background-color: whtie;
+  border-radius: 4px;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+  background-color: white;
+}
+
+.wrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.category,
+.date {
+  font-size: 14px;
+  line-height: 18px;
+  color: grey;
+}
+
+.sum {
+  font-size: 40px;
+  line-height: 50px;
+  color: orange;
+  margin-bottom: 24px;
+}
+
+.name {
+  font-size: 32px;
+  line-height: 40px;
+  margin-bottom: 16px;
+}
+
+.desc {
+  margin: 0 0 16px;
+  font-size: 16px;
+  line-height: 20px;
+}

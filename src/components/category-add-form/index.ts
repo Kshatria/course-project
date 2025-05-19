@@ -1,1 +1,1 @@
-export { CategoryAddForm, type CategoryAddFormProps} from './CategoryAddForm'
+export { CategoryAddForm, type CategoryAddFormProps } from './CategoryAddForm';

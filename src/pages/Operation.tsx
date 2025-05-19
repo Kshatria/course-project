@@ -1,14 +1,15 @@
+import { type FC } from 'react';
 import { useParams } from 'react-router';
 import { useQuery } from '@apollo/client';
-import { ChangeCategoryForm, Modal } from '@/components';
-import { CATEGORY_ONE } from '@/graphql';
+import { ChangeOperationForm, Modal } from '@/components';
+import { OPERATION } from '@/graphql';
 import { useModal } from '@/hooks';
 import { InformerDetail } from '@/ui';
 
-const Category = () => {
+const Operation: FC = () => {
   let params = useParams();
   const modal = useModal();
-  const { data, error, loading } = useQuery(CATEGORY_ONE, {
+  const { data, error, loading } = useQuery(OPERATION, {
     variables: {
       getOneId: params.id,
     },
@@ -18,18 +19,16 @@ const Category = () => {
   if (loading) return <p>Загрузка...</p>;
   if (error) return <p>Ошибка: {error.message}</p>;
 
-  const categories = data?.categories.getOne || null;
-
-  console.log('categories: ', categories);
+  const operation = data?.operations.getOne || null;
 
   return (
     <div>
-      {/* <InformerDetail {...categories} onClick={modal.show} /> */}
+      <InformerDetail {...operation} onClick={modal.show} />
       <Modal visible={modal.visible} onClose={modal.hide}>
-        <ChangeCategoryForm {...categories} closeFN={modal.hide} />
+        <ChangeOperationForm {...operation} closeFN={modal.hide} />
       </Modal>
     </div>
   );
 };
 
-export { Category };
+export { Operation };

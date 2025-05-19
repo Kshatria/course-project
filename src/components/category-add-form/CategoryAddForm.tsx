@@ -12,42 +12,35 @@ const CategoryAddForm: FC<CategoryAddFormProps> = ({ closeFN }) => {
   } = useForm<CategoryAddFormSentProps>({
     defaultValues: {
       name: '',
-      photo:  '',
+      photo: '',
     },
   });
 
   const [patch] = useMutation(CATEGORY_ADD);
 
-  const submit:SubmitHandler<CategoryAddFormSentProps> = async (data) => {
+  const submit: SubmitHandler<CategoryAddFormSentProps> = async (data) => {
     try {
-      await  patch({
+      await patch({
         variables: {
           addInput2: {
             name: data.name,
-            photo:  data.photo,
-          }
+            photo: data.photo,
+          },
         },
-      })
-      closeFN()
+      });
+      closeFN();
     } catch (err) {
       throw new Error(`Ошибка входа: ${err}`);
     }
-
-  }
-  console.log(errors)
+  };
+  console.log(errors);
   return (
     <form onSubmit={handleSubmit(submit)}>
-      <input
-        placeholder={'Name'}
-        {...register('name')}
-      />
-      <input
-        placeholder={'desc'}
-        {...register('photo')}
-      />
+      <input placeholder={'Name'} {...register('name')} />
+      <input placeholder={'desc'} {...register('photo')} />
       <button type={'submit'}>Submit</button>
     </form>
-  )
-}
+  );
+};
 
-export { CategoryAddForm, type CategoryAddFormProps }
+export { CategoryAddForm, type CategoryAddFormProps };

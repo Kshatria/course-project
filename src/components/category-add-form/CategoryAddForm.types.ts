@@ -5,11 +5,10 @@ type CategoryAddFormSentProps = {
   name: string;
   photo?: string;
   updated_at: string;
-}
+};
 
 type CategoryAddFormProps = {
   closeFN: () => void;
-}
+};
 
-
-export type { CategoryAddFormProps,CategoryAddFormSentProps  };
+export type { CategoryAddFormProps, CategoryAddFormSentProps };

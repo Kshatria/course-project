@@ -1,6 +1,6 @@
 import { type ReactNode, Suspense } from 'react';
 import { BrowserRouter, Navigate, Route, Routes, useLocation } from 'react-router-dom';
-import { Card, Categories, Dashboard, Login, Profile, Registration } from '@/pages';
+import { Operation, Categories, Dashboard, Login, Profile, Registration } from '@/pages';
 import { Category } from '@/pages/Category';
 import { useAuth } from '@/stores/useAuth';
 import { LayoutSelector } from './layouts';
@@ -34,7 +34,7 @@ const App = () => {
   const { isAuth } = useAuth();
 
   return (
-    <BrowserRouter>
+    <BrowserRouter basename="/course-project">
       <Suspense fallback={<div>Loading...</div>}>
         <Routes>
           <Route element={<LayoutSelector isAuthenticated={isAuth} />}>
@@ -73,7 +73,7 @@ const App = () => {
             <Route
               element={
                 <PrivateRoute isAuth={isAuth}>
-                  <Card />
+                  <Operation />
                 </PrivateRoute>
               }
               path="/dashboard/:id"
