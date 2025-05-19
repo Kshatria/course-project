@@ -9,7 +9,7 @@ const BackButton = () => {
   const location = useLocation();
   const { isAuth } = useAuth();
 
-  const ALLOWED_PATHS = ['/dashboard', '/profile'];
+  const ALLOWED_PATHS = ['/dashboard', '/profile', '/categories'];
 
   const historyRef = useRef<string[]>([]);
 
