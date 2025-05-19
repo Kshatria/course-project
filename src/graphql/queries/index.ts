@@ -1,2 +1,3 @@
-export { OPERATION_PROFIT, OPERATION_COST } from './operation';
+export { OPERATION } from './operation';
 export { OPERATIONS } from './operations';
+export { CATEGORIES, CATEGORY_ONE } from './categories'

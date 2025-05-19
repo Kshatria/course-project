@@ -1,2 +1,2 @@
-export { LOGIN, SIGN_UP } from './mutations';
-export { OPERATION_PROFIT, OPERATION_COST, OPERATIONS } from './queries';
+export { CATEGORY_ADD, CATEGORY_PATCH, LOGIN, OPERATION_ADD,OPERATION_PATCH, SIGN_UP } from './mutations';
+export { CATEGORIES, CATEGORY_ONE,OPERATION, OPERATIONS } from './queries';

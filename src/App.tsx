@@ -1,6 +1,7 @@
 import { type ReactNode, Suspense } from 'react';
 import { BrowserRouter, Navigate, Route, Routes, useLocation } from 'react-router-dom';
-import { Dashboard, Login, Profile, Registration } from '@/pages';
+import { Card, Categories, Dashboard, Login, Profile, Registration } from '@/pages';
+import { Category } from '@/pages/Category';
 import { useAuth } from '@/stores/useAuth';
 import { LayoutSelector } from './layouts';
 
@@ -60,6 +61,30 @@ const App = () => {
                 </PrivateRoute>
               }
               path="/dashboard"
+            />
+            <Route
+              element={
+                <PrivateRoute isAuth={isAuth}>
+                  <Categories />
+                </PrivateRoute>
+              }
+              path="/categories"
+            />
+            <Route
+              element={
+                <PrivateRoute isAuth={isAuth}>
+                  <Card />
+                </PrivateRoute>
+              }
+              path="/dashboard/:id"
+            />
+            <Route
+              element={
+                <PrivateRoute isAuth={isAuth}>
+                  <Category />
+                </PrivateRoute>
+              }
+              path="/categories/:id"
             />
             <Route
               element={
