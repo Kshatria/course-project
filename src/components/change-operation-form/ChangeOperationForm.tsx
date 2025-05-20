@@ -1,11 +1,12 @@
 import { type SubmitHandler, useForm } from 'react-hook-form';
-import { useMutation, useQuery } from '@apollo/client';
-import { CATEGORIES, OPERATION_PATCH } from '@/graphql';
+import { useMutation } from '@apollo/client';
+import { OPERATION_PATCH } from '@/graphql';
 import type { ChangeOperationFormProps } from './ChangeOperationForm.types';
 import { Button, Input, Select } from '@/ui';
 import { useApolloErrorHandler } from '@/apollo/useApolloErrorHandler';
 import { useToast } from '@/serviсes/ToastContext';
 import styles from './ChangeOperationForm.module.css';
+import { useCategories } from '@/hooks';
 
 const ChangeOperationForm = (props: ChangeOperationFormProps) => {
   const { show } = useToast();
@@ -25,12 +26,7 @@ const ChangeOperationForm = (props: ChangeOperationFormProps) => {
       category: props.category.id,
     },
   });
-  const { data, loading } = useQuery(CATEGORIES, {
-    variables: {
-      input: {},
-    },
-    fetchPolicy: 'network-only',
-  });
+  const { categories, loading } = useCategories();
 
   const [patch] = useMutation(OPERATION_PATCH);
 
@@ -73,7 +69,7 @@ const ChangeOperationForm = (props: ChangeOperationFormProps) => {
       </div>
       <div className={styles.field}>
         <Select
-          options={data.categories.getMany.data}
+          options={categories}
           label="Категория"
           {...register('category')}
           onChange={(id) => {

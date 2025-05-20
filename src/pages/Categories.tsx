@@ -1,22 +1,14 @@
 import { type FC } from 'react';
-import { useQuery } from '@apollo/client';
 import { CategoryAddForm, Modal, List } from '@/components';
-import { CATEGORIES } from '@/graphql/queries/categories';
-import { useModal } from '@/hooks';
+import { useCategories, useModal } from '@/hooks';
 import { Button } from '@/ui';
 
 const Categories: FC = () => {
   const modal = useModal();
-  const { data, error, loading } = useQuery(CATEGORIES, {
-    variables: {
-      input: {},
-    },
-    fetchPolicy: 'network-only',
-  });
+  const { categories, error, loading } = useCategories()
 
   if (loading) return <p>Загрузка...</p>;
   if (error) return <p>Ошибка: {error.message}</p>;
-  const categories = data?.categories?.getMany?.data || [];
 
   console.log(categories);
 
