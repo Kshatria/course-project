@@ -1,12 +1,13 @@
 import { type SubmitHandler, useForm } from 'react-hook-form';
 import { useMutation } from '@apollo/client';
-import { OPERATION_PATCH } from '@/graphql';
-import type { ChangeOperationFormProps } from './ChangeOperationForm.types';
-import { Button, Input, Select } from '@/ui';
 import { useApolloErrorHandler } from '@/apollo/useApolloErrorHandler';
-import { useToast } from '@/serviсes/ToastContext';
-import styles from './ChangeOperationForm.module.css';
+import { OPERATION_PATCH } from '@/graphql';
 import { useCategories } from '@/hooks';
+import { useToast } from '@/serviсes/ToastContext';
+import { Button, Input, Select } from '@/ui';
+import type { ChangeOperationFormProps } from './ChangeOperationForm.types';
+import styles from './ChangeOperationForm.module.css';
+
 
 const ChangeOperationForm = (props: ChangeOperationFormProps) => {
   const { show } = useToast();
@@ -56,28 +57,37 @@ const ChangeOperationForm = (props: ChangeOperationFormProps) => {
   return (
     <form className={styles['change-form']} onSubmit={handleSubmit(submit)}>
       <div className={styles.field}>
-        <Input label="Наименование" {...register('name')} />
+        <Input error={errors.name?.message} label="Наименование" {...register('name', {
+          required: 'Поле наименование не заполнено'
+        })} />
       </div>
       <div className={styles.field}>
         <Input label="Описание" {...register('desc')} />
       </div>
       <div className={styles.field}>
-        <Input label="Стоимость" {...register('amount')} />
+        <Input error={errors.amount?.message} label="Стоимость" {...register('amount', {
+          required: 'Поле стоимость не заполнено'
+        })} />
       </div>
       <div className={styles.field}>
-        <Input label="Дата" type="date" {...register('date')} />
+        <Input error={errors.date?.message} label="Дата" type="date" {...register('date', {
+          required: 'Поле дата не заполнено'
+        })} />
       </div>
       <div className={styles.field}>
         <Select
-          options={categories}
+          defaultValue={props.category.id}
           label="Категория"
-          {...register('category')}
+          options={categories}
+          {...register('category', {
+            required: 'Категория не выбрана'
+          })}
           onChange={(id) => {
             setValue('category', id);
           }}
         />
       </div>
-      <Button type={'submit'} text="Добавить" />
+      <Button text="Изменить" type={'submit'} />
     </form>
   );
 };

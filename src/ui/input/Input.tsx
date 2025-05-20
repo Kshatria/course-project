@@ -12,7 +12,6 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
 
     const isPassword = type === 'password';
     const inputType = isPassword && showPassword ? 'text' : type;
-
     return (
       <div className={`${styles.container} ${className}`}>
         {label && (
@@ -20,10 +19,11 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
             {label}
           </label>
         )}
-
+        {value}
         <div className={styles.inputWrapper}>
           <input
             className={`${styles.input} ${error ? styles.error : ''}`}
+            defaultValue={value}
             id={id}
             placeholder={placeholder}
             ref={ref}

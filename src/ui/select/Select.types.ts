@@ -6,11 +6,12 @@ type Option = {
 };
 
 type SelectProps = {
-  options: Option[];
-  label: string;
-  register?: UseFormRegisterReturn;
   defaultValue?: string;
+  error?: string;
+  label: string;
   onChange: (id: string) => void;
+  options: Option[];
+  register?: UseFormRegisterReturn;
 };
 
-export type { SelectProps, Option };
+export type { Option,SelectProps };
