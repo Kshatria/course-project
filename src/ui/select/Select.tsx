@@ -2,13 +2,13 @@ import { useState, useRef, useEffect } from 'react';
 import type { SelectProps, Option } from './Select.types';
 import styles from './Select.module.css';
 
-const Select = ({ options, label, register, defaultValue = '', onChange }: SelectProps) => {
+const Select = ({ options, label, register, defaultValue = '', onChange, error }: SelectProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedValue, setSelectedValue] = useState(defaultValue);
   const selectRef = useRef<HTMLDivElement>(null);
 
   const selectedOption = options.find((opt) => opt.id === selectedValue) || options[0];
-
+  console.log(selectedOption);
   const handleSelect = (option: Option) => {
     setSelectedValue(option.id);
     setIsOpen(false);
@@ -37,7 +37,7 @@ const Select = ({ options, label, register, defaultValue = '', onChange }: Selec
       <label className={styles.label}>{label}</label>
 
       <div
-        className={`${styles.selectHeader} ${isOpen ? styles.open : ''}`}
+        className={`${styles.selectHeader} ${isOpen ? styles.open : ''} ${error ? styles.error : '' }`}
         onClick={() => setIsOpen(!isOpen)}
       >
         <span>{selectedOption?.name || 'Выберите...'}</span>
@@ -70,6 +70,7 @@ const Select = ({ options, label, register, defaultValue = '', onChange }: Selec
           onChange={register.onChange}
         />
       )}
+      {error && <span className={styles.errorMessage}>{error}</span>}
     </div>
   );
 };

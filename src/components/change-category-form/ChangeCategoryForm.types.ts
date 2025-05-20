@@ -7,6 +7,7 @@ type ChangeCategoryFormProps = {
   desc?: string;
   id: string;
   name?: string;
+  photo?: string;
 };
 
 export type { ChangeCategoryFormProps };

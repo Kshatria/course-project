@@ -1,11 +1,11 @@
 import { type FC } from 'react';
 import { type SubmitHandler, useForm } from 'react-hook-form';
 import { useMutation } from '@apollo/client';
-import { CATEGORY_ADD } from '@/graphql/mutations';
-import type { CategoryAddFormProps, CategoryAddFormSentProps } from './CategoryAddForm.types';
-import { Input, Button } from '@/ui';
 import { useApolloErrorHandler } from '@/apollo/useApolloErrorHandler';
+import { CATEGORY_ADD } from '@/graphql/mutations';
 import { useToast } from '@/serviсes/ToastContext';
+import { Button, Input } from '@/ui';
+import type { CategoryAddFormProps, CategoryAddFormSentProps } from './CategoryAddForm.types';
 import styles from './CategoryAddForm.module.css';
 
 const CategoryAddForm: FC<CategoryAddFormProps> = ({ closeFN }) => {
@@ -47,12 +47,14 @@ const CategoryAddForm: FC<CategoryAddFormProps> = ({ closeFN }) => {
   return (
     <form className={styles.form} onSubmit={handleSubmit(submit)}>
       <div className={styles.field}>
-        <Input label="Наименование" {...register('name')} />
+        <Input error={errors.name?.message} label="Наименование" {...register('name', {
+          required: 'Не заполнено поле'
+        })} />
       </div>
       <div className={styles.field}>
-        <Input label="Описание" {...register('photo')} />
+        <Input label="Фото" {...register('photo')} />
       </div>
-      <Button type={'submit'} text="Добавить" />
+      <Button text="Добавить" type={'submit'} />
     </form>
   );
 };

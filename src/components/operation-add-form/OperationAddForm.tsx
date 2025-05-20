@@ -1,11 +1,11 @@
 import { type FC } from 'react';
 import { type SubmitHandler, useForm } from 'react-hook-form';
 import { useMutation } from '@apollo/client';
+import { useApolloErrorHandler } from '@/apollo/useApolloErrorHandler';
 import { OPERATION_ADD } from '@/graphql/mutations';
 import { useCategories } from '@/hooks';
-import { Button, Input, Select } from '@/ui';
-import { useApolloErrorHandler } from '@/apollo/useApolloErrorHandler';
 import { useToast } from '@/serviсes/ToastContext';
+import { Button, Input, Select } from '@/ui';
 import type { OperationAddFormProps, OperationAddFormSentProps } from './OperationAddForm.types';
 import styles from './OperationAddForm.module.css';
 
@@ -71,7 +71,13 @@ const OperationAddForm: FC<OperationAddFormProps> = ({ closeFN }) => {
         <Input label="Описание" {...register('desc')} />
       </div>
       <div className={styles.field}>
-        <Input label="Стоимость" {...register('amount')} />
+        <Input
+          error={errors.amount?.message}
+          label="Стоимость"
+          {...register('amount', {
+            required: 'Не заполнено поле'
+          })}
+        />
       </div>
       <div className={styles.field}>
         <Input
@@ -103,6 +109,7 @@ const OperationAddForm: FC<OperationAddFormProps> = ({ closeFN }) => {
           {...register('category', {
             required: 'Не выбрана категория',
           })}
+          error={errors.category?.message}
           onChange={(id) => {
             setValue('category', id);
           }}
