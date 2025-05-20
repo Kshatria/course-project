@@ -5,10 +5,14 @@ import { LOGIN } from '@/graphql';
 import { useAuth } from '@/stores/useAuth';
 import { Button, Input } from '@/ui';
 import { type FormLoginData } from './FormLogin.types';
-import { isServerErrors, getFirstError } from '@/errors';
+import { useApolloErrorHandler } from '@/apollo/useApolloErrorHandler';
+import { useToast } from '@/serviсes/ToastContext';
 import styles from './FormLogin.module.css';
 
 const FormLogin = () => {
+  const { show } = useToast();
+  const { handleQueryErrors } = useApolloErrorHandler();
+
   const {
     formState: { errors, isValid },
     handleSubmit,
@@ -20,8 +24,9 @@ const FormLogin = () => {
     onCompleted: (data) => {
       login(data.profile.signin.token);
     },
-    onError: (err) => {
-      throw new Error(`Ошибка входа: ${err}`);
+    onError: (error) => {
+      const processedErrors = handleQueryErrors(error);
+      show(processedErrors, 'error');
     },
   });
 
@@ -34,10 +39,8 @@ const FormLogin = () => {
         },
       });
     } catch (error) {
-      if (isServerErrors(error)) {
-        const firstError = getFirstError(error);
-        //showToast(firstError);
-      }
+      const processedErrors = handleQueryErrors(error);
+      show(processedErrors, 'error');
     }
   };
 

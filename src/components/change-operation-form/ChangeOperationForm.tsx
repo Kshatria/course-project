@@ -3,9 +3,14 @@ import { useMutation, useQuery } from '@apollo/client';
 import { CATEGORIES, OPERATION_PATCH } from '@/graphql';
 import type { ChangeOperationFormProps } from './ChangeOperationForm.types';
 import { Button, Input, Select } from '@/ui';
+import { useApolloErrorHandler } from '@/apollo/useApolloErrorHandler';
+import { useToast } from '@/serviсes/ToastContext';
 import styles from './ChangeOperationForm.module.css';
 
 const ChangeOperationForm = (props: ChangeOperationFormProps) => {
+  const { show } = useToast();
+  const { handleQueryErrors } = useApolloErrorHandler();
+
   const {
     formState: { errors },
     handleSubmit,
@@ -20,7 +25,7 @@ const ChangeOperationForm = (props: ChangeOperationFormProps) => {
       category: props.category.id,
     },
   });
-  const { data, error, loading } = useQuery(CATEGORIES, {
+  const { data, loading } = useQuery(CATEGORIES, {
     variables: {
       input: {},
     },
@@ -46,12 +51,12 @@ const ChangeOperationForm = (props: ChangeOperationFormProps) => {
         },
       });
       props.closeFN();
-    } catch (err) {
-      throw new Error(`Ошибка входа: ${err}`);
+    } catch (error) {
+      const processedErrors = handleQueryErrors(error);
+      show(processedErrors, 'error');
     }
   };
   if (loading) return <p>Загрузка...</p>;
-  if (error) return <p>Ошибка: {error.message}</p>;
   return (
     <form className={styles['change-form']} onSubmit={handleSubmit(submit)}>
       <div className={styles.field}>

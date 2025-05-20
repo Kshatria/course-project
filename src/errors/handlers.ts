@@ -1,12 +1,5 @@
-import { ServerErrors, ErrorCode, ServerError } from './types';
+import { ServerErrors, ProcessedError, ServerError } from './types';
 import { ERROR_MESSAGES } from './constants';
-
-type ProcessedError = {
-  code: ErrorCode;
-  message: string;
-  field?: string;
-  original: ServerError;
-};
 
 /**
  * Основной обработчик ошибок сервера
@@ -58,15 +51,12 @@ const handleFormErrors = (
  * Возвращает первую ошибку для показа в UI
  */
 const getFirstError = (errors: ServerErrors): string => {
-  if (errors.errors.length === 0) return 'Неизвестная ошибка';
-  return getErrorMessage(errors.errors[0]);
+  if (!errors?.errors || errors.errors.length === 0) {
+    return 'Неизвестная ошибка';
+  }
+
+  const firstError = errors.errors[0];
+  return ERROR_MESSAGES[firstError.extensions.code] || firstError.message || 'Неизвестная ошибка';
 };
 
-export {
-  type ProcessedError,
-  handleServerErrors,
-  processSingleError,
-  getErrorMessage,
-  handleFormErrors,
-  getFirstError,
-};
+export { handleServerErrors, processSingleError, getErrorMessage, handleFormErrors, getFirstError };

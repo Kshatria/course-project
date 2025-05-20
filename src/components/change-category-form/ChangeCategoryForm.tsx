@@ -3,9 +3,14 @@ import { useMutation } from '@apollo/client';
 import { CATEGORY_PATCH } from '@/graphql';
 import type { ChangeCategoryFormProps } from './ChangeCategoryForm.types';
 import { Input, Button } from '@/ui';
+import { useApolloErrorHandler } from '@/apollo/useApolloErrorHandler';
+import { useToast } from '@/serviсes/ToastContext';
 import styles from './ChangeCategoryForm.module.css';
 
 const ChangeCategoryForm = (props: ChangeCategoryFormProps) => {
+  const { show } = useToast();
+  const { handleQueryErrors } = useApolloErrorHandler();
+
   const {
     formState: { errors },
     handleSubmit,
@@ -16,11 +21,10 @@ const ChangeCategoryForm = (props: ChangeCategoryFormProps) => {
     },
   });
 
-  const [patch, { error, loading }] = useMutation(CATEGORY_PATCH);
+  const [patch, { loading }] = useMutation(CATEGORY_PATCH);
 
   const submit: SubmitHandler<ChangeCategoryFormProps> = async (data) => {
     try {
-      console.log(props.id);
       await patch({
         variables: {
           getOneId: null,
@@ -33,13 +37,12 @@ const ChangeCategoryForm = (props: ChangeCategoryFormProps) => {
         console.log(res);
         props.closeFN();
       });
-    } catch (err) {
-      throw new Error(`Ошибка входа: ${err}`);
+    } catch (error) {
+      const processedErrors = handleQueryErrors(error);
+      show(processedErrors, 'error');
     }
   };
-
-  console.log(loading, error);
-  console.log(errors);
+  if (loading) return <p>Загрузка...</p>;
   return (
     <form className={styles['change-form']} onSubmit={handleSubmit(submit)}>
       <div className={styles.field}>

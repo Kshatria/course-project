@@ -4,10 +4,15 @@ import { useMutation } from '@apollo/client';
 import { SIGN_UP } from '@/graphql';
 import { useAuth } from '@/stores/useAuth';
 import { Button, Input } from '@/ui';
+import { useApolloErrorHandler } from '@/apollo/useApolloErrorHandler';
+import { useToast } from '@/serviсes/ToastContext';
 import type { FormRegistrationData } from './FormRegistration.types';
 import styles from './FormRegistration.module.css';
 
 const FormRegistration = () => {
+  const { show } = useToast();
+  const { handleQueryErrors } = useApolloErrorHandler();
+
   const {
     formState: { errors, isValid },
     handleSubmit,
@@ -20,8 +25,9 @@ const FormRegistration = () => {
     onCompleted: (data) => {
       login(data.profile.signup.token);
     },
-    onError: (err) => {
-      throw new Error(`Ошибка регистрации: ${err.message}`);
+    onError: (error) => {
+      const processedErrors = handleQueryErrors(error);
+      show(processedErrors, 'error');
     },
   });
 
@@ -36,8 +42,9 @@ const FormRegistration = () => {
           commandId: '7808',
         },
       });
-    } catch (err) {
-      throw new Error(`Ошибка регистрации: ${err}`);
+    } catch (error) {
+      const processedErrors = handleQueryErrors(error);
+      show(processedErrors, 'error');
     }
   };
 

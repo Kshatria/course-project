@@ -5,9 +5,14 @@ import { OPERATION_ADD } from '@/graphql/mutations';
 import type { OperationAddFormProps, OperationAddFormSentProps } from './OperationAddForm.types';
 import { CATEGORIES } from '@/graphql';
 import { Button, Input, Select } from '@/ui';
+import { useApolloErrorHandler } from '@/apollo/useApolloErrorHandler';
+import { useToast } from '@/serviсes/ToastContext';
 import styles from './OperationAddForm.module.css';
 
 const OperationAddForm: FC<OperationAddFormProps> = ({ closeFN }) => {
+  const { show } = useToast();
+  const { handleQueryErrors } = useApolloErrorHandler();
+
   const {
     formState: { errors },
     handleSubmit,
@@ -24,7 +29,7 @@ const OperationAddForm: FC<OperationAddFormProps> = ({ closeFN }) => {
     },
   });
 
-  const { data, error, loading } = useQuery(CATEGORIES, {
+  const { data, loading } = useQuery(CATEGORIES, {
     variables: {
       input: {},
     },
@@ -35,7 +40,6 @@ const OperationAddForm: FC<OperationAddFormProps> = ({ closeFN }) => {
 
   const submit: SubmitHandler<OperationAddFormSentProps> = async (el) => {
     try {
-      console.log(el);
       await patch({
         variables: {
           input: {
@@ -49,15 +53,13 @@ const OperationAddForm: FC<OperationAddFormProps> = ({ closeFN }) => {
         },
       });
       closeFN();
-    } catch (err) {
-      throw new Error(`Ошибка входа: ${err}`);
+    } catch (error) {
+      const processedErrors = handleQueryErrors(error);
+      show(processedErrors, 'error');
     }
   };
 
-  console.log(loading, error);
-  console.log(errors);
-
-  if (!data) return <div>Загрузка...</div>;
+  if (loading) return <div>Загрузка...</div>;
   return (
     <form className={styles.form} onSubmit={handleSubmit(submit)}>
       <div className={styles.field}>

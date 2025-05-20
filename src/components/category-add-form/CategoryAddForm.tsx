@@ -3,10 +3,15 @@ import { type SubmitHandler, useForm } from 'react-hook-form';
 import { useMutation } from '@apollo/client';
 import { CATEGORY_ADD } from '@/graphql/mutations';
 import type { CategoryAddFormProps, CategoryAddFormSentProps } from './CategoryAddForm.types';
-import styles from './CategoryAddForm.module.css';
 import { Input, Button } from '@/ui';
+import { useApolloErrorHandler } from '@/apollo/useApolloErrorHandler';
+import { useToast } from '@/serviсes/ToastContext';
+import styles from './CategoryAddForm.module.css';
 
 const CategoryAddForm: FC<CategoryAddFormProps> = ({ closeFN }) => {
+  const { show } = useToast();
+  const { handleQueryErrors } = useApolloErrorHandler();
+
   const {
     formState: { errors },
     handleSubmit,
@@ -18,7 +23,7 @@ const CategoryAddForm: FC<CategoryAddFormProps> = ({ closeFN }) => {
     },
   });
 
-  const [patch] = useMutation(CATEGORY_ADD);
+  const [patch, { loading }] = useMutation(CATEGORY_ADD);
 
   const submit: SubmitHandler<CategoryAddFormSentProps> = async (data) => {
     try {
@@ -31,11 +36,13 @@ const CategoryAddForm: FC<CategoryAddFormProps> = ({ closeFN }) => {
         },
       });
       closeFN();
-    } catch (err) {
-      throw new Error(`Ошибка входа: ${err}`);
+    } catch (error) {
+      const processedErrors = handleQueryErrors(error);
+      show(processedErrors, 'error');
     }
   };
-  console.log(errors);
+
+  if (loading) return <p>Загрузка...</p>;
   return (
     <form className={styles.form} onSubmit={handleSubmit(submit)}>
       <div className={styles.field}>
