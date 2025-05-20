@@ -22,14 +22,15 @@ const CategoryAddForm: FC<CategoryAddFormProps> = ({ closeFN }) => {
 
   const submit: SubmitHandler<CategoryAddFormSentProps> = async (data) => {
     try {
-      await patch({
+      const formData = {
         variables: {
           addInput2: {
             name: data.name,
             photo: data.photo,
           },
         },
-      });
+      }
+      await patch(formData);
       closeFN();
     } catch (err) {
       throw new Error(`Ошибка входа: ${err}`);

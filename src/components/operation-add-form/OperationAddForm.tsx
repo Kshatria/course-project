@@ -1,10 +1,10 @@
 import { type FC } from 'react';
 import { type SubmitHandler, useForm } from 'react-hook-form';
-import { useMutation, useQuery } from '@apollo/client';
+import { useMutation } from '@apollo/client';
 import { OPERATION_ADD } from '@/graphql/mutations';
-import type { OperationAddFormProps, OperationAddFormSentProps } from './OperationAddForm.types';
-import { CATEGORIES } from '@/graphql';
+import { useCategories } from '@/hooks';
 import { Button, Input, Select } from '@/ui';
+import type { OperationAddFormProps, OperationAddFormSentProps } from './OperationAddForm.types';
 import styles from './OperationAddForm.module.css';
 
 const OperationAddForm: FC<OperationAddFormProps> = ({ closeFN }) => {
@@ -24,18 +24,12 @@ const OperationAddForm: FC<OperationAddFormProps> = ({ closeFN }) => {
     },
   });
 
-  const { data, error, loading } = useQuery(CATEGORIES, {
-    variables: {
-      input: {},
-    },
-    fetchPolicy: 'network-only',
-  });
+  const { categories, error, loading } = useCategories()
 
   const [patch] = useMutation(OPERATION_ADD);
 
   const submit: SubmitHandler<OperationAddFormSentProps> = async (el) => {
     try {
-      console.log(el);
       await patch({
         variables: {
           input: {
@@ -54,31 +48,33 @@ const OperationAddForm: FC<OperationAddFormProps> = ({ closeFN }) => {
     }
   };
 
-  console.log(loading, error);
-  console.log(errors);
-
-  if (!data) return <div>Загрузка...</div>;
+  if (loading) return <div>Загрузка...</div>;
+  if (error) return <div>Ошибка: {error.message}</div>;
   return (
     <form className={styles.form} onSubmit={handleSubmit(submit)}>
       <div className={styles.field}>
-        <Input label="Наименование" {...register('name')} />
+        <Input error={errors.name?.message} label="Наименование" {...register('name', {
+          required: 'Не заполнено поле'
+        })} />
       </div>
       <div className={styles.field}>
         <Input label="Описание" {...register('desc')} />
       </div>
       <div className={styles.field}>
-        <Input label="Стоимость" {...register('amount')} />
+        <Input  label="Стоимость" {...register('amount')} />
       </div>
       <div className={styles.field}>
-        <Input label="Дата" type="date" {...register('date')} />
+        <Input error={errors.date?.message} label="Дата" type="date" {...register('date', {
+          required: 'Не выбрана дата'
+        })} />
       </div>
       <div className={styles.field}>
         <Select
+          label="Категория"
           options={[
             { id: 'Cost', name: 'Cost' },
             { id: 'Profit', name: 'Profit' },
           ]}
-          label="Категория"
           {...register('type')}
           onChange={(id) => {
             setValue('type', id as 'Cost' | 'Profit');
@@ -87,15 +83,17 @@ const OperationAddForm: FC<OperationAddFormProps> = ({ closeFN }) => {
       </div>
       <div className={styles.field}>
         <Select
-          options={data.categories.getMany.data}
           label="Категория"
-          {...register('category')}
+          options={categories}
+          {...register('category', {
+            required: 'Не выбрана категория'
+          })}
           onChange={(id) => {
             setValue('category', id);
           }}
         />
       </div>
-      <Button type={'submit'} text="Добавить" />
+      <Button text="Добавить" type={'submit'} />
     </form>
   );
 };
