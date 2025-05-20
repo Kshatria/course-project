@@ -24,7 +24,7 @@ const Category = () => {
 
   return (
     <div>
-      {/* <InformerDetail {...categories} onClick={modal.show} /> */}
+      <InformerDetail {...categories} onClick={modal.show} />
       <Modal visible={modal.visible} onClose={modal.hide}>
         <ChangeCategoryForm {...categories} closeFN={modal.hide} />
       </Modal>

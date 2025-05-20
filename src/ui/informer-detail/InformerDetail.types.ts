@@ -5,6 +5,12 @@ type InformerDetailProps = Operation & {
   disabled?: boolean;
   /* Событие редактирования операции */
   onClick: () => void;
+  /* Фото  */
+  photo?: string;
+  /* id команды  */
+  commandId?: string;
+  /* Дата редактирования  */
+  updatedAt?: string;
 };
 
 export type { InformerDetailProps };

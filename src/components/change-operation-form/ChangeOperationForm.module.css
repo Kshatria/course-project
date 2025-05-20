@@ -1,5 +1,8 @@
 .change-form {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+}
+
+.field {
+  margin-bottom: 24px;
 }

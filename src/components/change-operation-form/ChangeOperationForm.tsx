@@ -2,6 +2,7 @@ import { type SubmitHandler, useForm } from 'react-hook-form';
 import { useMutation, useQuery } from '@apollo/client';
 import { CATEGORIES, OPERATION_PATCH } from '@/graphql';
 import type { ChangeOperationFormProps } from './ChangeOperationForm.types';
+import { Button, Input, Select } from '@/ui';
 import styles from './ChangeOperationForm.module.css';
 
 const ChangeOperationForm = (props: ChangeOperationFormProps) => {
@@ -9,7 +10,8 @@ const ChangeOperationForm = (props: ChangeOperationFormProps) => {
     formState: { errors },
     handleSubmit,
     register,
-  } = useForm<ChangeOperationFormProps & { category: string }>({
+    setValue,
+  } = useForm<Omit<ChangeOperationFormProps, 'category'> & { category: string }>({
     defaultValues: {
       name: props.name || '',
       desc: props.desc || '',
@@ -27,7 +29,9 @@ const ChangeOperationForm = (props: ChangeOperationFormProps) => {
 
   const [patch] = useMutation(OPERATION_PATCH);
 
-  const submit: SubmitHandler<ChangeOperationFormProps> = async (elements) => {
+  const submit: SubmitHandler<
+    Omit<ChangeOperationFormProps, 'category'> & { category: string }
+  > = async (elements) => {
     try {
       await patch({
         variables: {
@@ -50,19 +54,29 @@ const ChangeOperationForm = (props: ChangeOperationFormProps) => {
   if (error) return <p>Ошибка: {error.message}</p>;
   return (
     <form className={styles['change-form']} onSubmit={handleSubmit(submit)}>
-      <input placeholder={'Name'} {...register('name')} />
-      <input placeholder={'desc'} {...register('desc')} />
-      <input placeholder={'amount'} {...register('amount')} />
-      <input placeholder={'date'} {...register('date')} />
-      <select {...register('category')} defaultValue={props.category?.id}>
-        {data !== undefined &&
-          data.categories.getMany.data.map((item: any) => (
-            <option key={item.id} value={item.id}>
-              {item.name}
-            </option>
-          ))}
-      </select>
-      <button type={'submit'}>Submit</button>
+      <div className={styles.field}>
+        <Input label="Наименование" {...register('name')} />
+      </div>
+      <div className={styles.field}>
+        <Input label="Описание" {...register('desc')} />
+      </div>
+      <div className={styles.field}>
+        <Input label="Стоимость" {...register('amount')} />
+      </div>
+      <div className={styles.field}>
+        <Input label="Дата" type="date" {...register('date')} />
+      </div>
+      <div className={styles.field}>
+        <Select
+          options={data.categories.getMany.data}
+          label="Категория"
+          {...register('category')}
+          onChange={(id) => {
+            setValue('category', id);
+          }}
+        />
+      </div>
+      <Button type={'submit'} text="Добавить" />
     </form>
   );
 };

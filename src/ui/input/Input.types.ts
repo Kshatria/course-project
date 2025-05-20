@@ -1,6 +1,6 @@
 import { type InputHTMLAttributes } from 'react';
 
-type InputType = 'email' | 'password' | 'text';
+type InputType = 'email' | 'password' | 'text' | 'date';
 
 type InputProps = InputHTMLAttributes<HTMLInputElement> & {
   className?: string;

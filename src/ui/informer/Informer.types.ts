@@ -13,8 +13,6 @@ export type InformerProps = {
   amount?: number;
   /* id команды  */
   commandId?: string;
-  /* Дата создания  */
-  createdAt?: string;
   /* Фото  */
   photo?: string;
   /* Дата редактирования  */

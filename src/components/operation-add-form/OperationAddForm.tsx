@@ -4,12 +4,15 @@ import { useMutation, useQuery } from '@apollo/client';
 import { OPERATION_ADD } from '@/graphql/mutations';
 import type { OperationAddFormProps, OperationAddFormSentProps } from './OperationAddForm.types';
 import { CATEGORIES } from '@/graphql';
+import { Button, Input, Select } from '@/ui';
+import styles from './OperationAddForm.module.css';
 
 const OperationAddForm: FC<OperationAddFormProps> = ({ closeFN }) => {
   const {
     formState: { errors },
     handleSubmit,
     register,
+    setValue,
   } = useForm<OperationAddFormSentProps>({
     defaultValues: {
       name: '',
@@ -17,7 +20,7 @@ const OperationAddForm: FC<OperationAddFormProps> = ({ closeFN }) => {
       amount: 0,
       date: new Date().getDate().toString(),
       category: '',
-      type: 'Cost'
+      type: 'Cost',
     },
   });
 
@@ -28,13 +31,12 @@ const OperationAddForm: FC<OperationAddFormProps> = ({ closeFN }) => {
     fetchPolicy: 'network-only',
   });
 
-
   const [patch] = useMutation(OPERATION_ADD);
 
-  const submit:SubmitHandler<OperationAddFormSentProps> = async (el) => {
+  const submit: SubmitHandler<OperationAddFormSentProps> = async (el) => {
     try {
-      console.log(el)
-      await  patch({
+      console.log(el);
+      await patch({
         variables: {
           input: {
             name: el.name,
@@ -42,49 +44,60 @@ const OperationAddForm: FC<OperationAddFormProps> = ({ closeFN }) => {
             amount: Number(el.amount),
             categoryId: el.category,
             type: el.type,
-            date: el.date
-          }
+            date: el.date,
+          },
         },
-      })
-      closeFN()
+      });
+      closeFN();
     } catch (err) {
       throw new Error(`Ошибка входа: ${err}`);
     }
+  };
 
-  }
+  console.log(loading, error);
+  console.log(errors);
 
-  console.log( loading, error)
-  console.log(errors)
+  if (!data) return <div>Загрузка...</div>;
   return (
-    <form onSubmit={handleSubmit(submit)}>
-      <input
-        placeholder={'Name'}
-        {...register('name')}
-      />
-      <input
-        placeholder={'desc'}
-        {...register('desc')}
-      />
-      <input
-        placeholder={'amount'}
-        {...register('amount')}
-      />
-      <input placeholder={'date'} type={'date'}
-             {...register('date')} />
-
-      <select  {...register('type')}>
-        <option value={'Cost'}>Cost</option>
-        <option value={'Profit'}>Profit</option>
-      </select>
-
-      <select {...register('category')}>
-        {data !== undefined && data.categories.getMany.data.map((item: any) => (
-          <option key={item.id} value={item.id}>{(item.name)}</option>
-        ))}
-      </select>
-      <button type={'submit'}>Submit</button>
+    <form className={styles.form} onSubmit={handleSubmit(submit)}>
+      <div className={styles.field}>
+        <Input label="Наименование" {...register('name')} />
+      </div>
+      <div className={styles.field}>
+        <Input label="Описание" {...register('desc')} />
+      </div>
+      <div className={styles.field}>
+        <Input label="Стоимость" {...register('amount')} />
+      </div>
+      <div className={styles.field}>
+        <Input label="Дата" type="date" {...register('date')} />
+      </div>
+      <div className={styles.field}>
+        <Select
+          options={[
+            { id: 'Cost', name: 'Cost' },
+            { id: 'Profit', name: 'Profit' },
+          ]}
+          label="Категория"
+          {...register('type')}
+          onChange={(id) => {
+            setValue('type', id as 'Cost' | 'Profit');
+          }}
+        />
+      </div>
+      <div className={styles.field}>
+        <Select
+          options={data.categories.getMany.data}
+          label="Категория"
+          {...register('category')}
+          onChange={(id) => {
+            setValue('category', id);
+          }}
+        />
+      </div>
+      <Button type={'submit'} text="Добавить" />
     </form>
-  )
-}
+  );
+};
 
-export { OperationAddForm, type OperationAddFormProps }
+export { OperationAddForm, type OperationAddFormProps };

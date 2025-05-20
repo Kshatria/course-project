@@ -3,6 +3,8 @@ import { type SubmitHandler, useForm } from 'react-hook-form';
 import { useMutation } from '@apollo/client';
 import { CATEGORY_ADD } from '@/graphql/mutations';
 import type { CategoryAddFormProps, CategoryAddFormSentProps } from './CategoryAddForm.types';
+import styles from './CategoryAddForm.module.css';
+import { Input, Button } from '@/ui';
 
 const CategoryAddForm: FC<CategoryAddFormProps> = ({ closeFN }) => {
   const {
@@ -35,10 +37,14 @@ const CategoryAddForm: FC<CategoryAddFormProps> = ({ closeFN }) => {
   };
   console.log(errors);
   return (
-    <form onSubmit={handleSubmit(submit)}>
-      <input placeholder={'Name'} {...register('name')} />
-      <input placeholder={'desc'} {...register('photo')} />
-      <button type={'submit'}>Submit</button>
+    <form className={styles.form} onSubmit={handleSubmit(submit)}>
+      <div className={styles.field}>
+        <Input label="Наименование" {...register('name')} />
+      </div>
+      <div className={styles.field}>
+        <Input label="Описание" {...register('photo')} />
+      </div>
+      <Button type={'submit'} text="Добавить" />
     </form>
   );
 };

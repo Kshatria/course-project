@@ -14,6 +14,12 @@
   gap: 0.5rem;
 }
 
+.label {
+  display: block;
+  text-align: left;
+  margin-bottom: 4px;
+}
+
 .password-toggle {
   position: relative;
 }
@@ -63,7 +69,7 @@
 }
 
 .submitButton:hover {
-  background: #535bf2;
+  background: orange;
 }
 
 .submitButton:disabled {

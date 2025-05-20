@@ -2,6 +2,7 @@ import { type SubmitHandler, useForm } from 'react-hook-form';
 import { useMutation } from '@apollo/client';
 import { CATEGORY_PATCH } from '@/graphql';
 import type { ChangeCategoryFormProps } from './ChangeCategoryForm.types';
+import { Input, Button } from '@/ui';
 import styles from './ChangeCategoryForm.module.css';
 
 const ChangeCategoryForm = (props: ChangeCategoryFormProps) => {
@@ -41,8 +42,10 @@ const ChangeCategoryForm = (props: ChangeCategoryFormProps) => {
   console.log(errors);
   return (
     <form className={styles['change-form']} onSubmit={handleSubmit(submit)}>
-      <input placeholder={'Name'} {...register('name')} />
-      <button type={'submit'}>Submit</button>
+      <div className={styles.field}>
+        <Input label={'Наименование'} {...register('name')} />
+      </div>
+      <Button type={'submit'} text="Добавить" />
     </form>
   );
 };

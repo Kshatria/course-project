@@ -23,6 +23,7 @@
   font-size: 24px;
   line-height: 30px;
   color: orange;
+  text-align: end;
 }
 
 .name {
@@ -35,4 +36,11 @@
   margin: 0 0 16px;
   font-size: 16px;
   line-height: 20px;
+}
+
+.date {
+  text-align: end;
+  font-size: 14px;
+  line-height: 18px;
+  color: grey;
 }
