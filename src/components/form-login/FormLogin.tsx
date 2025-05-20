@@ -5,6 +5,7 @@ import { LOGIN } from '@/graphql';
 import { useAuth } from '@/stores/useAuth';
 import { Button, Input } from '@/ui';
 import { type FormLoginData } from './FormLogin.types';
+import { isServerErrors, getFirstError } from '@/errors';
 import styles from './FormLogin.module.css';
 
 const FormLogin = () => {
@@ -15,7 +16,7 @@ const FormLogin = () => {
   } = useForm<FormLoginData>({ mode: 'onChange' });
   const { login } = useAuth();
 
-  const [_login, { error: gqlError, loading }] = useMutation(LOGIN, {
+  const [_login, { loading }] = useMutation(LOGIN, {
     onCompleted: (data) => {
       login(data.profile.signin.token);
     },
@@ -32,8 +33,11 @@ const FormLogin = () => {
           password: data.password,
         },
       });
-    } catch (err) {
-      throw new Error(`Ошибка входа: ${err}`);
+    } catch (error) {
+      if (isServerErrors(error)) {
+        const firstError = getFirstError(error);
+        //showToast(firstError);
+      }
     }
   };
 
@@ -73,14 +77,6 @@ const FormLogin = () => {
           text={loading ? 'Вход...' : 'Войти'}
           type="submit"
         />
-
-        {gqlError && (
-          <p className={styles.error}>
-            {gqlError.message.includes('Invalid credentials')
-              ? 'Неверный email или пароль'
-              : gqlError.message}
-          </p>
-        )}
       </form>
     </div>
   );

@@ -1,15 +1,11 @@
 import { Link } from 'react-router-dom';
-import { Informer, type InformerProps, Loader } from '@/ui';
-import styles from './ScrollList.module.css';
+import { Informer, Loader } from '@/ui';
+import { ListProps } from './list.types';
+import styles from './List.module.css';
 
-type ScrollListProps = {
-  defaultItems: InformerProps[];
-  type: 'dashboard' | 'categories';
-};
-
-const ScrollList = ({ defaultItems, type = 'dashboard' }: ScrollListProps) => {
+const List = ({ defaultItems, type = 'dashboard' }: ListProps) => {
   return (
-    <article className={styles['scroll-list']}>
+    <article className={styles.list}>
       <div className={styles.wrapper}>
         {defaultItems.map((item: any) => (
           <Link to={`/${type}/${item.id}`} className={styles.item} key={item.id}>
@@ -23,4 +19,4 @@ const ScrollList = ({ defaultItems, type = 'dashboard' }: ScrollListProps) => {
   );
 };
 
-export { ScrollList };
+export { List };

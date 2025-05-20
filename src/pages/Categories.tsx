@@ -1,6 +1,6 @@
 import { type FC } from 'react';
 import { useQuery } from '@apollo/client';
-import { CategoryAddForm, Modal, ScrollList } from '@/components';
+import { CategoryAddForm, Modal, List } from '@/components';
 import { CATEGORIES } from '@/graphql/queries/categories';
 import { useModal } from '@/hooks';
 import { Button } from '@/ui';
@@ -25,7 +25,7 @@ const Categories: FC = () => {
       <div style={{ display: 'flex', justifyContent: 'center', margin: '24px' }}>
         <Button onClick={modal.show} text="Добавить операцию" />
       </div>
-      <ScrollList defaultItems={categories} onScroll={() => {}} type="categories" />
+      <List defaultItems={categories} type="categories" />
       <Modal visible={modal.visible} onClose={modal.hide}>
         <CategoryAddForm closeFN={modal.hide} />
       </Modal>

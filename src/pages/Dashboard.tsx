@@ -1,6 +1,6 @@
 import type { FC } from 'react';
 import { useQuery } from '@apollo/client';
-import { OperationAddForm, Modal, ScrollList } from '@/components';
+import { OperationAddForm, Modal, List } from '@/components';
 import { OPERATIONS } from '@/graphql';
 import { useModal } from '@/hooks';
 import { Button } from '@/ui';
@@ -23,7 +23,7 @@ const Dashboard: FC = () => {
       <div style={{ display: 'flex', justifyContent: 'center', margin: '24px' }}>
         <Button onClick={modal.show} text="Добавить операцию" />
       </div>
-      <ScrollList defaultItems={operations} onScroll={() => {}} />
+      <List defaultItems={operations} type="dashboard" />
       <Modal visible={modal.visible} onClose={modal.hide}>
         <OperationAddForm closeFN={modal.hide} />
       </Modal>

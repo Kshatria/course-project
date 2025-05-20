@@ -7,4 +7,4 @@ export { FormRegistration, type FormRegistrationData } from './form-registration
 export { Modal } from './modal';
 export { OperationAddForm } from './operation-add-form';
 export { UserDropdown } from './user-dropdown';
-export { ScrollList } from './scroll-list';
+export { List } from './list';
